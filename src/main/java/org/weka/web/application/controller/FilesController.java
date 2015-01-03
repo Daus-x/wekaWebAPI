@@ -28,14 +28,17 @@ public class FilesController {
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<String>> getAllFiles(){
         List<String> tempList=fileService.getAllFileNames();
-        return new ResponseEntity<List<String>>(tempList, HttpStatus.OK);
+        if(tempList.size() == 0){
+            return  new ResponseEntity<List<String>>(new ArrayList<String>(),HttpStatus.BAD_REQUEST);
+        }else{
+            return new ResponseEntity<List<String>>(tempList, HttpStatus.OK);
+        }
     }
 
     @RequestMapping(value = "/{fileName}",method = RequestMethod.GET)
     public ResponseEntity<List<String>> getListOfAttributes(@PathVariable("fileName") String fileName){
 
         try {
-
             List<String> tempList = smoService.GetAttributes(fileName);
             return new ResponseEntity<List<String>>(tempList, HttpStatus.OK);
         } catch (Exception e) {
