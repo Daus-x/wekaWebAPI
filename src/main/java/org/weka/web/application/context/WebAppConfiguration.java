@@ -7,7 +7,10 @@ import org.springframework.web.multipart.support.StandardServletMultipartResolve
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.weka.web.application.controller.FilesController;
+import org.weka.web.application.controller.SMOController;
 import org.weka.web.application.controller.SimpleController;
+import org.weka.web.application.controller.UploadController;
 
 /**
  * Created by suad on 1/3/2015.
@@ -21,4 +24,17 @@ public class WebAppConfiguration {
         return new SimpleController();
     }
 
+    @Bean
+    public MultipartResolver multipartResolver(){
+        return new StandardServletMultipartResolver();
+    }
+
+    @Bean
+    public SMOController smoController(){return new SMOController();}
+
+    @Bean
+    public UploadController uploadController(){return new UploadController();}
+
+    @Bean
+    public FilesController filesController(){return new FilesController();}
 }
