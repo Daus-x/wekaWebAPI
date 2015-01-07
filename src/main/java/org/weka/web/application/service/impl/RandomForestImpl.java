@@ -6,6 +6,7 @@ import org.weka.web.application.service.WekaClassifierService;
 import weka.classifiers.Classifier;
 import weka.classifiers.Evaluation;
 import weka.classifiers.functions.SMO;
+import weka.classifiers.trees.RandomForest;
 import weka.core.Instances;
 import weka.core.converters.ConverterUtils;
 
@@ -16,11 +17,10 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Created by suad on 1/3/2015.
+ * Created by suad on 1/7/2015.
  */
-public class SMOServiceImpl implements WekaClassifierService {
-    public static final String OPTION_STRING = "-C 1.0 -L 0.0010 -P 1.0E-12 -N 0 -V -1 -W 1 " +
-            "-K \"weka.classifiers.functions.supportVector.PolyKernel -C 250007 -E 1.0\"";
+public class RandomForestImpl implements WekaClassifierService {
+    public static final String OPTION_STRING = "-I 10 -K 0 -S 1";
 
     @Autowired
     FileService fileService;
@@ -43,7 +43,7 @@ public class SMOServiceImpl implements WekaClassifierService {
         Instances tranInstance = getInstances(fileName);
         Instances testInstance = getInstances(fileName);
 
-        Classifier smoClassifier = new SMO();
+        Classifier smoClassifier = new RandomForest();
         String[] options=weka.core.Utils.splitOptions(OPTION_STRING);
         smoClassifier.setOptions(options);
         smoClassifier.buildClassifier(tranInstance);
@@ -61,7 +61,7 @@ public class SMOServiceImpl implements WekaClassifierService {
     public List<String> crossValidateFile(String fileName) throws Exception {
         Instances tranInstance = getInstances(fileName);
 
-        Classifier smoClassifier = new SMO();
+        Classifier smoClassifier = new RandomForest();
         String[] options=weka.core.Utils.splitOptions(OPTION_STRING);
         smoClassifier.setOptions(options);
         smoClassifier.buildClassifier(tranInstance);
@@ -88,14 +88,14 @@ public class SMOServiceImpl implements WekaClassifierService {
         results.add(f1);
 
         String summaryString= evaluation.toSummaryString();
-        resoleResults(summaryString,results);
+        resolveResults(summaryString, results);
 
 
         String matrixString = evaluation.toMatrixString();
-        resoleResults(matrixString, results);
+        resolveResults(matrixString, results);
 
         String classDetailsString = evaluation.toClassDetailsString();
-        resoleResults(classDetailsString, results);
+        resolveResults(classDetailsString, results);
         return results;
     }
 
@@ -112,7 +112,7 @@ public class SMOServiceImpl implements WekaClassifierService {
         return tranInstance;
     }
 
-    private void resoleResults(String text,List<String> stringList){
+    private void resolveResults(String text, List<String> stringList){
         String [] strings = text.split("\n");
         for(int count= 0; count<strings.length;count++){
             stringList.add(strings[count]);

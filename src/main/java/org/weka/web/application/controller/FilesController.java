@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.weka.web.application.service.FileService;
-import org.weka.web.application.service.SMOService;
+import org.weka.web.application.service.WekaClassifierService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +23,7 @@ public class FilesController {
     FileService fileService;
 
     @Autowired
-    SMOService smoService;
+    WekaClassifierService wekaClassifierService;
 
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<List<String>> getAllFiles(){
@@ -39,7 +39,7 @@ public class FilesController {
     public ResponseEntity<List<String>> getListOfAttributes(@PathVariable("fileName") String fileName){
 
         try {
-            List<String> tempList = smoService.GetAttributes(fileName);
+            List<String> tempList = wekaClassifierService.GetAttributes(fileName);
             return new ResponseEntity<List<String>>(tempList, HttpStatus.OK);
         } catch (Exception e) {
             e.printStackTrace();
@@ -47,4 +47,15 @@ public class FilesController {
         }
 
     }
-}
+
+    @RequestMapping(value = "/delete/{fileName}",method = RequestMethod.GET)
+    public ResponseEntity deleteFile(@PathVariable("fileName") String fileName){
+        boolean deleted =fileService.deleteFile(fileName);
+        if(deleted){
+            return ResponseEntity.ok("This is ok");
+        }
+        else{
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+ }

@@ -101,13 +101,12 @@
             <version>1.2.2</version>
         </dependency>
         <dependency>
-            <groupId>commons-io</groupId>
+            <groupId>org.apache.commons</groupId>
             <artifactId>commons-io</artifactId>
-            <version>1.4</version>
+            <version>1.3.2</version>
         </dependency>
+
     </dependencies>
-
-
     <build>
         <finalName>wekaWebAPI</finalName>
         <plugins>
